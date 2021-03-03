@@ -1,7 +1,6 @@
 <template>
   <ul class="nav-list">
     <li class="nav-item"><nuxt-link to="/about">About me</nuxt-link></li>
-    <li class="nav-item"><nuxt-link to="/blog">Blog</nuxt-link></li>
     <li class="nav-item"><nuxt-link to="/contact">Contact</nuxt-link></li>
   </ul>
 </template>

@@ -25,7 +25,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/vue-social-sharing.js',
-     '~/plugins/prism'
+    '~/plugins/prism'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -60,7 +60,9 @@ export default {
   },
 
   // Content module configuration: https://go.nuxtjs.dev/config-content
-  content: {},
+  content: {
+    nestedProperties: ['author.name']
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

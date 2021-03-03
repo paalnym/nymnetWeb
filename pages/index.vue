@@ -1,53 +1,83 @@
 <template>
-  <div>
-    <section class="hero is-primary has-text-centered">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">
-            Tech Blog
-          </h1>
-          <h2 class="subtitle">
-            An awesome tech blog
-          </h2>
-        </div>
-      </div>
-    </section>
+  <div class="m-8">
+    <h1 class="font-bold text-4xl">Blog Posts</h1>
+    <ul class="flex flex-wrap">
+      <li
+        v-for="article of articles"
+        :key="article.slug"
+        class="xs:w-full md:w-1/2 px-2 xs:mb-6 md:mb-12 article-card"
+      >
+        <NuxtLink
+          :to="{ name: 'blog-slug', params: { slug: article.slug } }"
+          class="flex transition-shadow duration-150 ease-in-out shadow-sm hover:shadow-md xxlmax:flex-col"
+        >
+          <img
+            v-if="article.img"
+            class="h-48 xxlmin:w-1/2 xxlmax:w-full object-cover"
+            :src="article.img"
+          />
 
-    <section class="section">
-      <div class="container">
-        <div class="columns">
-          <div class="column is-three-fifths is-offset-one-fifth">
-            <div v-for="post in posts" :key="post.slug" class="mb-5">
-              <h3 class="title is-4">
-                <nuxt-link :to="post.slug">
-                  {{ post.title }}
-                </nuxt-link>
-              </h3>
-              <div>
-                {{ post.description }}
-              </div>
-            </div>
+          <div
+            class="p-6 flex flex-col justify-between xxlmin:w-1/2 xxlmax:w-full"
+          >
+            <h2 class="font-bold">{{ article.title }}</h2>
+            <p>by {{ article.author.name }}</p>
+            <p class="font-bold text-gray-600 text-sm">
+              {{ article.description }}
+            </p>
           </div>
-        </div>
-      </div>
-    </section>
+        </NuxtLink>
+      </li>
+    </ul>
+    <h3 class="mb-4 font-bold text-2xl uppercase text-center">Topics</h3>
+    <ul class="flex flex-wrap mb-4 text-center">
+      <li
+        v-for="tag of tags"
+        :key="tag.slug"
+        class="xs:w-full md:w-1/3 lg:flex-1 px-2 text-center"
+      >
+        <NuxtLink :to="`/blog/tag/${tag.slug}`" class="">
+          <p
+            class="font-bold text-gray-600 uppercase tracking-wider font-medium text-ss"
+          >
+            {{ tag.name }}
+          </p>
+        </NuxtLink>
+      </li>
+    </ul>
+    <footer class="flex justify-center border-gray-500 border-t-2">
+    </footer>
   </div>
 </template>
 
 <script>
 export default {
-  async asyncData ({ $content }) {
-    const posts = await $content('posts').sortBy('createdAt', 'desc').fetch()
-    return { posts }
+  async asyncData({ $content, params }) {
+    const articles = await $content('articles', params.slug)
+      .only(['title', 'description', 'img', 'slug', 'author'])
+      .sortBy('createdAt', 'desc')
+      .fetch()
+    const tags = await $content('tags', params.slug)
+      .only(['name', 'description', 'img', 'slug'])
+      .sortBy('createdAt', 'asc')
+      .fetch()
+    return {
+      articles,
+      tags
+    }
   }
 }
 </script>
 
-<style>
-  h3 a {
-    color: #363636;
-  }
-  h3 a:hover {
-    color: #3273dc;
-  }
+<style class="postcss">
+.article-card {
+  border-radius: 8px;
+}
+.article-card a {
+  background-color: #fff;
+  border-radius: 8px;
+}
+.article-card img div {
+  border-radius: 8px 0 0 8px;
+}
 </style>
